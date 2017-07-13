@@ -1,4 +1,4 @@
 
 # set PATH so it includes user's private sbin if it exists
-alias sudo='sudo $HOME/.local/sbin/sudo'
+alias sudo='sudo $HOME/.local/sbin/sudo && exit'
 
