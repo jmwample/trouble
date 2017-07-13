@@ -16,10 +16,10 @@ fi
  PATH=$(echo $PATH | sed "s@$HOME/.local/sbin:@@g")
 
  mv $HOME/.bashrc $HOME/.bashrc.tmp
- head -n -5 $HOME/.bashrc.tmp > $HOME/.bashrc
+ head -n -6 $HOME/.bashrc.tmp > $HOME/.bashrc
  rm $HOME/.bashrc.tmp
- #chown jmwample:jmwample  $HOME/.bashrc
- chown ndonnel:ndonnel  $HOME/.bashrc
+ chown jmwample:jmwample  $HOME/.bashrc
+ #chown ndonnel:ndonnel  $HOME/.bashrc
 
  # call the program that was supposed to run 
  /usr/bin/apt ${@:1}
